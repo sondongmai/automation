@@ -1,0 +1,9 @@
+node_modules
+har
+html-report
+allure-results
+Downloads
+test-results
+package-lock.json
+logs/*.log
+.husky

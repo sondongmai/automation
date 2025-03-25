@@ -1,0 +1,67 @@
+{
+  "name": "playwright-typescript-playwright-test",
+  "version": "1.0.0",
+  "description": "Playwright Framework with Typescript",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:single": "npx playwright test Studio.test.ts --project=Chrome",
+    "test:parallel": "npx playwright test --grep @Smoke11 --project=Chrome",
+    "test:serial": "npx playwright test --grep @Smoke --workers=1 --project=Chrome",
+    "test:ui": "npx playwright test --grep @Smoke --ui",
+    "test:api": "npx playwright test --grep @API --workers=1 --project=Chrome",
+    "test:db": "npx playwright test DB.test.ts --project=DB",
+    "test:record": "npx playwright codegen",
+    "test:visual": "npx playwright test visualComparision.test.ts --project=Chrome",
+    "test:device": "npx playwright test Emulation.test.ts --grep @SmokeEmulator --project=Chromium",
+    "allureReport": "allure serve",
+    "lighthouse": "node tests/lighthouse/Lighthouse.js",
+    "test:accessibility": "npx playwright test Axe.test.ts --project=Chrome",
+    "prepare": "husky install",
+    "lint": "eslint . '**/*.{js,ts}'",
+    "format": "prettier --write ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.cloudokyo.dev/Moon/gjw_web_playwright_ts.git"
+  },
+  "author": "Moon Nguyen",
+  "license": "Automation Testing Team",
+  "dependencies": {
+    "@axe-core/playwright": "^4.10.0",
+    "@faker-js/faker": "^9.3.0",
+    "@types/crypto-js": "^4.2.2",
+    "allure-playwright": "^3.0.1",
+    "crypto-js": "^4.2.0",
+    "eslint-plugin-import": "^2.29.1",
+    "exceljs": "^4.4.0",
+    "lighthouse": "^9.3.1",
+    "ortoni-report": "^2.0.3",
+    "pdfjs-dist-es5": "^2.13.216",
+    "pg": "^8.13.0",
+    "playwright": "^1.48.2",
+    "typescript": "^5.6.2",
+    "winston": "^3.14.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.2",
+    "@types/node": "^22.8.1",
+    "@typescript-eslint/eslint-plugin": "^8.15.0",
+    "@typescript-eslint/parser": "^8.15.0",
+    "eslint": "^9.15.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**.*": "prettier --write --ignore-unknown"
+  }
+}

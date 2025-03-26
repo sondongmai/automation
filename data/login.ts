@@ -1,4 +1,4 @@
-import { commonData } from "./common";
+import {commonData} from "./common";
 export const loginData = {
   ...commonData,
   userTw1: {
@@ -200,6 +200,7 @@ export const loginData = {
     email: "vosem82277@ndiety.com",
     password: "111111@Aq",
   },
+  //
   normalAcc: {
     email: "JwAcc@mailinator.com",
     password: "Aa12345678",
@@ -244,5 +245,8 @@ export const loginData = {
     email: "voyoye8708@ahaks.com",
     password: "Ab129480",
   },
-
+  newAcc4: {
+    email: "voyoye8708sf@ahaks.com",
+    password: "Ab129480z",
+  },
 };

@@ -1,22 +1,23 @@
-import { Page, BrowserContext, Locator, expect } from "@playwright/test";
-import { WebActions } from "@lib/WebActions";
-import { testConfig } from "../../testConfig";
-import { BasePage } from "./BasePage";
-import { url } from "../../data/url";
-import { ContentType } from "@lib/HelperAction";
-import { pageTitle } from "../../data/Studio";
-import { joinFile } from "../../utils/functional/utils"
+import {Page, BrowserContext, Locator, expect} from "@playwright/test";
+import {WebActions} from "@lib/WebActions";
+import {testConfig} from "../../testConfig";
+import {BasePage} from "./BasePage";
+import {url} from "../../data/url";
+import {ContentType} from "@lib/HelperAction";
+import {pageTitle} from "../../data/Studio";
+import {joinFile} from "../../utils/functional/utils";
 
-import * as path from 'path';
-import { el } from "@faker-js/faker/.";
+import * as path from "path";
+import {el} from "@faker-js/faker/.";
 let webActions: WebActions;
 const CONTENT_SELECTION = (content) => {
   return `//ul[contains(@class, 'MuiMenu-list')]//li[.='${content}']`;
 };
 const VIDEO_UPLOAD_INPUT_SELECTOR = `input[type='file']`;
 const THUMB_UPLOAD_INPUT_SELECTOR = `label.content-center input[type='file']`;
-const TITLE_VIDEO_PLAYLIST = ".playlist_video_title"
-const TITLE_VIDEO = "//main[@id='main']/div/div[2]"
+const THUMB_UPDATE = `//label[contains(@class,'row')]//input`;
+const TITLE_VIDEO_PLAYLIST = ".playlist_video_title";
+const TITLE_VIDEO = "//main[@id='main']/div/div[2]";
 const selectionList = (category) => {
   return `//label[text()='${category}']/following-sibling::div`;
 };
@@ -106,18 +107,14 @@ export class StudioPage extends BasePage {
   readonly thumbnailInput: Locator;
   readonly visibilityInput: Locator;
   readonly uploadVideoInput: Locator;
-  readonly myAvaOption:Locator;
-  readonly avatar:Locator;
+  readonly myAvaOption: Locator;
+  readonly avatar: Locator;
   readonly avatarUser: Locator;
   readonly avatarMyChannel: Locator;
-  readonly avatarGangJW: Locator;  
-
-
-
-
-
-
-
+  readonly avatarGangJW: Locator;
+  readonly kidOption: Locator;
+  readonly visibility: Locator;
+  readonly btnComment: Locator;
 
   constructor(page: Page, context: BrowserContext) {
     super(page, context);
@@ -127,7 +124,9 @@ export class StudioPage extends BasePage {
     this.SELECT_FILE_BUTTON = page.locator(`//button[.='Select File']`);
     this.TITLE_INPUT = page.locator(`textarea#title`);
     this.textareaPlayList = page.locator(`//textarea[@placeholder='Add a descriptive title']`);
-    this.descriptionInpputPlayList = page.locator(`//textarea[@placeholder='Tell viewers more about your playlist']`);
+    this.descriptionInpputPlayList = page.locator(
+      `//textarea[@placeholder='Tell viewers more about your playlist']`,
+    );
     this.VIDEO_UPLOAD_BTN = page.locator(CONTENT_SELECTION(ContentType.video));
     this.descriptionInpput = page.locator(`textarea#description`);
     this.nextButton = page.locator(`//button[.='Next']`);
@@ -147,18 +146,18 @@ export class StudioPage extends BasePage {
     this.deleteBtn = page.locator(`button.MuiButton-colorError`);
     this.deleteConfirmCheckbox = page.locator(`label.MuiFormControlLabel-root input`);
     this.deleteConfirmBtn = page.locator(`.MuiDialogActions-root button.MuiButton-colorError`);
-    this.noVideoLabel = page.locator(`.absolute-center`);
-    this.editBtn = page.locator(`(//button[@aria-label='Edit'])[1]`)
+    this.noVideoLabel = page.locator(`.absolute-center span`);
+    this.editBtn = page.locator(`ul div.menuItemIcon:nth-child(1)`);
     this.saveBtn = page.locator(`//button[normalize-space()='Save']`);
     this.backBtn = page.locator(`//li[1]/button`);
     this.notification = page.locator(`#notistack-snackbar`);
     this.backBtnHeader = page.locator(`h2>button`);
-    this.moreOptions = page.locator(`.video_menu_btn`)
-    this.titleDialog = page.locator(`.share_dialog>h3`)
-    this.copyLink = page.locator(`//button[text()="Copy Link"]`)
-    this.closeBtn = page.locator(`.close_btn`)
-    this.watchLocator = page.locator(`(//button[@aria-label='Watch'])[1]`)
-    this.previewLocator = page.locator(`(//button[@aria-label='Preview'])[1]`)
+    this.moreOptions = page.locator(`.video_menu_btn`);
+    this.titleDialog = page.locator(`.share_dialog>h3`);
+    this.copyLink = page.locator(`//button[text()="Copy Link"]`);
+    this.closeBtn = page.locator(`.close_btn`);
+    this.watchLocator = page.locator(`ul div.menuItemIcon:nth-child(2)`);
+    this.previewLocator = page.locator(`(//button[@aria-label='Preview'])[1]`);
     this.updateArticleBtn = page.locator("//button[.='Update']");
     this.draftArticleBtn = page.locator("//button[.='Save Draft']");
     this.publishArticleBtn = page.locator("//button[.='Publish Now']");
@@ -169,11 +168,17 @@ export class StudioPage extends BasePage {
     this.addPlayListBtn = page.locator("td>div>button");
     this.addVideoBtn = page.locator("//button[normalize-space()='Add Videos']");
     this.selectAllVideoOption = page.locator("div > label > span > input[type='checkbox']");
-    this.allListVideoBtn = page.locator("//button[contains(@aria-label, 'Loading button') and contains(text(), 'Add')]");
-    this.creatListVideoBtn = page.locator("//button[contains(@aria-label, 'Loading button') and contains(text(), 'Create Playlist')]");
-    this.moreVisibilityBTN = page.locator("td>div>div>div>span")
-    this.myAvatarOption = page.locator(".avatar_menu")
-    this.myAvaOption = page.locator("//header[contains(@id,'header')]//button//div[contains(@class, 'avatar_wrap')]")
+    this.allListVideoBtn = page.locator(
+      "//button[contains(@aria-label, 'Loading button') and contains(text(), 'Add')]",
+    );
+    this.creatListVideoBtn = page.locator(
+      "//button[contains(@aria-label, 'Loading button') and contains(text(), 'Create Playlist')]",
+    );
+    this.moreVisibilityBTN = page.locator("td>div>div>div>span");
+    this.myAvatarOption = page.locator(".avatar_menu");
+    this.myAvaOption = page.locator(
+      "//header[contains(@id,'header')]//button//div[contains(@class, 'avatar_wrap')]",
+    );
 
     this.playListTitle = page.locator("//main[@id='main']/div/div[2]");
     this.playAllBtn = page.locator("//button[normalize-space()='Play All']");
@@ -181,76 +186,75 @@ export class StudioPage extends BasePage {
     this.titlePlayList = page.locator("//main[@id='main']//h1");
     this.categoryInput = page.locator("#category_id");
     this.thumbnailInput = page.locator("//label[text()[normalize-space()='Thumbnail']]");
-    this.uploadVideoInput = page.locator("//label[text()[normalize-space()='Upload Video']]");
+    //this.thumbnailInput = page.locator("//label[normalize-space()='Thumbnail']");
+    this.uploadVideoInput = page.locator("//div[text()[normalize-space()='Upload Video']]"); //
     this.avatar = page.locator(".userInfo");
     this.avatarUser = page.locator("ul.MuiMenu-list li:nth-child(1) a");
     this.avatarMyChannel = page.locator("//ul[contains(@class, 'MuiMenu-list')]//li[2]//a");
     this.avatarGangJW = page.locator("//ul[contains(@class, 'MuiMenu-list')]//li[3]//a");
-
-
-
-
+    this.kidOption = page.locator("//input[@value='no']");
+    this.btnComment = page.locator("//div[contains(text(),'Comments')]");
   }
 
   async navigateToStudio(): Promise<void> {
-    await this.page.goto(testConfig.studioUrl)
+    await this.page.goto(testConfig.studioUrl);
   }
-  async loginAndNavigate({ loginPage }, accountData) {
-    const { email, password } = accountData;
+  async loginAndNavigate({loginPage}, accountData) {
+    const {email, password} = accountData;
     await loginPage.login({
       username: email,
       password: password,
     });
     await this.navigateToStudio();
   }
-  async verifyAvatarOptions({ option, title }) {
-    await this.myAvatarOption.first().click()
+  async verifyAvatarOptions({option, title}) {
+    await this.myAvatarOption.first().click();
     await this.page.locator(menuSelectionOption(option)).click();
     const titlePage = await this.page.title();
     expect(titlePage).toContain(title);
   }
 
-  async expandAvatarMenu({option,title} ) {
+  async expandAvatarMenu({option, title}) {
     await this.myAvaOption.click();
     for (let i = 0; i < option.length; i++) {
       const menu = this.page.locator(menuSelectionOption(option[i]));
       await expect(menu).toBeVisible();
       await expect(menu).toHaveText(title[i]);
-    } 
+    }
   }
-  async navigateFromAvartaMenu({option,title} ) {
-      switch (option) {
-        case 'user':
-          await this.avatarUser.click();
-          break;
-        case 'My Channel':
-          await this.avatarMyChannel.click();
-          break;
-        case 'Gang JW':
-          await this.avatarGangJW.click();
-          break;
-        default:
-          throw new Error(`Invalid option: ${option}`);
-      }
-      const titlePage = await this.page.title();
-      expect(titlePage).toContain(title);
+  async navigateFromAvartaMenu({option, title}) {
+    switch (option) {
+      case "user":
+        await this.avatarUser.click();
+        break;
+      case "My Channel":
+        await this.avatarMyChannel.click();
+        break;
+      case "Gang JW":
+        await this.avatarGangJW.click();
+        break;
+      default:
+        throw new Error(`Invalid option: ${option}`);
+    }
+    const titlePage = await this.page.title();
+    expect(titlePage).toContain(title);
   }
-  async menuBtnChannel({ option, title }) {
+  async menuBtnChannel({option, title}) {
     for (let i = 0; i < option.length; i++) {
       const menu = this.page.locator(menuOptionChannel(option[i]));
       await expect(menu).toBeVisible();
       await expect(menu).toHaveText(title[i]);
     }
   }
-  async menuBtnGJW({ option, title }) {
+  async menuBtnGJW({option, title}) {
     for (let i = 0; i < option.length; i++) {
       const menu = this.page.locator(menuOptionGJW(option[i]));
       await expect(menu).toBeVisible();
       await expect(menu).toHaveText(title[i]);
     }
   }
-  async verifyAvatarItems({ option, title }) {
-    await this.avatar.click()
+  async verifyAvatarItems({option, title}) {
+    await this.avatar.click();
     await this.page.locator(menuSelectionOption(option)).click();
     const titlePage = await this.page.title();
     expect(titlePage).toContain(title);
@@ -263,7 +267,8 @@ export class StudioPage extends BasePage {
       await this.selectLang("English");
     }
     if (contentType !== ContentType.article) {
-      let contentPath: string = contentType === ContentType.video ? testConfig.videoPath : testConfig.shortPath;
+      let contentPath: string =
+        contentType === ContentType.video ? testConfig.videoPath : testConfig.shortPath;
       await this.uploadContent(VIDEO_UPLOAD_INPUT_SELECTOR, contentPath);
     }
   }
@@ -272,16 +277,12 @@ export class StudioPage extends BasePage {
     await this.uploadContent(THUMB_UPLOAD_INPUT_SELECTOR, testConfig.thumbnailPath[0]);
   }
   async changeThumbnail(): Promise<void> {
-    await this.uploadContent(VIDEO_UPLOAD_INPUT_SELECTOR, testConfig.thumbnailPath[1]);
+    await this.uploadContent(THUMB_UPDATE, testConfig.thumbnailPath[1]);
   }
 
-  async fillContentDetail({
-    title,
-    description,
-    category = "",
-    contentLang = "",
-  }) {
+  async fillContentDetail({title, description, category = "", contentLang = ""}) {
     await this.TITLE_INPUT.fill(title);
+    await this.kidOption.click();
     await this.descriptionInpput.fill(description);
     if (category) {
       await this.page.locator(selectionList("Category")).click();
@@ -292,8 +293,12 @@ export class StudioPage extends BasePage {
       await this.page.locator(menuSelectionOption(contentLang)).click();
     }
   }
+  async fillVisibility({visibility}) {
+    await this.page.locator(selectionList("Visibility")).click();
+    await this.page.locator(menuSelectionOption(visibility)).click();
+  }
 
-  async handleContentButton({ contentType }: { contentType: ContentType }) {
+  async handleContentButton({contentType}: {contentType: ContentType}) {
     switch (contentType) {
       case ContentType.video:
         await this.uploadThumbnail();
@@ -304,6 +309,7 @@ export class StudioPage extends BasePage {
 
       case ContentType.short:
         await this.waitForApiResponse(url.updateContent, this.publishBtn);
+        await this.page.waitForTimeout(20000);
         break;
 
       case ContentType.article:
@@ -316,16 +322,24 @@ export class StudioPage extends BasePage {
     }
   }
 
-  async fillArticleContent({ title, description, articleContent, category, contentLang, uploadThumbnail = false }) {
+  async fillArticleContent({
+    title,
+    description,
+    articleContent,
+    category,
+    contentLang,
+    uploadThumbnail = false,
+  }) {
     await this.articleEditor.fill(articleContent);
     await this.articleTitle.fill(title);
+    await this.kidOption.click();
     await this.articleDescription.fill(description);
     await this.page.locator(selectionList("Category")).click();
     await this.page.locator(menuSelectionOption(category)).click();
     await this.page.locator(selectionList("Content Language")).click();
     await this.page.locator(menuSelectionOption(contentLang)).click();
     await this.articleEditor.fill(articleContent);
-    
+
     if (uploadThumbnail) {
       await this.uploadThumbnail();
       await this.waitForApiResponse(url.addContent, this.publishArticleBtn);
@@ -347,19 +361,22 @@ export class StudioPage extends BasePage {
     await this.deleteConfirmCheckbox.check();
     await this.deleteConfirmBtn.click();
   }
+  async VerifySeeComment(): Promise<void> {
+    await this.btnComment.click();
+  }
 
   async verifyContentEmpty(): Promise<void> {
     await expect(this.noVideoLabel).toBeVisible();
-    await expect(this.noVideoLabel).toContainText('have no');
-
+    await expect(this.noVideoLabel).toContainText("have no");
   }
   async clickOnEditBtn(): Promise<void> {
-    await this.editBtn.click();
+    await this.editBtn.first().click();
   }
 
-  async verifyNotification({ locator, message }) {
+  async verifyNotification({locator, message}) {
     await expect(locator.first()).toBeVisible();
     await expect(locator.first()).toContainText(message);
+    await this.page.waitForTimeout(5000);
   }
 
   async clickOnBackChannel(): Promise<void> {
@@ -371,16 +388,16 @@ export class StudioPage extends BasePage {
   async clickOnback(): Promise<void> {
     await this.backBtnHeader.click();
   }
-  async clickOnMoreOptions({ index }: { index: number }) {
+  async clickOnMoreOptions({index}: {index: number}) {
     const option = this.moreOptions.nth(index);
     await option.click();
     await this.page.waitForTimeout(500);
   }
-  async handleThreeDotMenu({ option }) {
-    await this.page.locator(menuSelectionOption(option)).click()
+  async handleThreeDotMenu({option}) {
+    await this.page.locator(menuSelectionOption(option)).click();
   }
-  async verifyShare({ content }) {
-    const shareOptions = ['Facebook', 'Twitter', 'Telegram', 'Line', 'Reddit', 'Weibo'];
+  async verifyShare({content}) {
+    const shareOptions = ["Facebook", "Twitter", "Telegram", "Line", "Reddit", "Weibo"];
 
     await expect(this.titleDialog).toBeVisible();
     await expect(this.titleDialog).toContainText(`Share this ${content}`);
@@ -391,14 +408,14 @@ export class StudioPage extends BasePage {
     }
   }
 
-  async clickShareIcon({ items }: { items: string[] }) {
+  async clickShareIcon({items}: {items: string[]}) {
     for (const item of items) {
       const shareButtonLocator = this.page.locator(menuShareOption(item));
       const newPage = await this.handleMultipleWindows(shareButtonLocator);
       let expectedTitle = item;
-      if (item === 'Twitter') {
+      if (item === "Twitter") {
         expectedTitle = pageTitle.Twitter;
-      } else if (item === 'Weibo') {
+      } else if (item === "Weibo") {
         expectedTitle = pageTitle.Weibo;
       }
       const titlePage = await newPage.title();
@@ -413,34 +430,30 @@ export class StudioPage extends BasePage {
     await expect(this.itemPage).toContainText(parameter);
   }
 
-  async verifyComment({ title }) {
+  async verifyComment({title}) {
     await expect(this.titleComment.first()).toBeVisible();
     await expect(this.titleComment.first()).toHaveText(title);
-
   }
-  async clickDeleteContent({ option }) {
+  async clickDeleteContent({option}) {
     await this.page.locator(menuSelectionOption(option)).click();
     await this.deleteBtn.click();
-
   }
-  async changeVisibility({ order, option }: { order: number, option: string }) {
+  async changeVisibility({order, option}: {order: number; option: string}) {
     await this.moreVisibilityBTN.nth(order).click();
     await this.page.locator(menuSelectionOption(option)).click();
-
   }
   async clickAddPlayList() {
     await this.addPlayListBtn.click();
   }
-  async openSideBarMenu({ menu }) {
+  async openSideBarMenu({menu}) {
     await this.page.locator(sidebarOption(menu)).click();
     await this.page.reload();
-
   }
-  async fillContentPlayList({ title, description }) {
+  async fillContentPlayList({title, description}) {
     await this.textareaPlayList.fill(title);
     await this.descriptionInpputPlayList.fill(description);
   }
-  async clickOnAddContent({ createButton = false }) {
+  async clickOnAddContent({createButton = false}) {
     await this.addVideoBtn.click();
     await this.selectAllVideoOption.click();
     await this.allListVideoBtn.click();
@@ -459,14 +472,13 @@ export class StudioPage extends BasePage {
     await this.deleteConfirmBtn.click();
   }
 
-
   async clickCloseIcon(): Promise<void> {
     await expect(this.closeBtn).toBeVisible();
     await this.closeBtn.click();
   }
 
   async clickOnWatch(): Promise<Page> {
-    const newPage = await this.handleMultipleWindows(this.watchLocator);
+    const newPage = await this.handleMultipleWindows(this.watchLocator.first());
     return newPage;
   }
   async clickButtonPlayAll(): Promise<Page> {
@@ -483,21 +495,21 @@ export class StudioPage extends BasePage {
     const download = await waitForDownloadEvent;
     const fileName = download.suggestedFilename();
     await download.saveAs(path.join(downloadPath, fileName));
-    joinFile(downloadPath, fileName)
+    joinFile(downloadPath, fileName);
   }
 
   async getVideoTitles(page: any, selector: string): Promise<string[]> {
     return await page.$$eval(selector, (elements) =>
-      elements.map((el) => el.textContent?.trim() || "")
+      elements.map((el) => el.textContent?.trim() || ""),
     );
   }
 
-  async getVideoTitlesFromList({ direction, option }) {
+  async getVideoTitlesFromList({direction, option}) {
     const titlesBeforeChange = await this.getVideoTitles(this.page, TITLE_VIDEO_PLAYLIST);
 
     const directions = this.page.locator(menuSelectionOption(direction));
     await this.waitForApiResponse(url.updatePlayList, directions);
-    await this.page.waitForTimeout(2000)
+    await this.page.waitForTimeout(2000);
 
     const titlesAfterChange = await this.getVideoTitles(this.page, TITLE_VIDEO_PLAYLIST);
 
@@ -510,11 +522,9 @@ export class StudioPage extends BasePage {
     }
   }
 
-
   async navigateToUrlClipboard() {
-    await this.page.context().grantPermissions(['clipboard-read', 'clipboard-write'], {
+    await this.page.context().grantPermissions(["clipboard-read", "clipboard-write"], {
       origin: this.page.url(),
-
     });
 
     const clipboardContent = await this.page.evaluate(() => navigator.clipboard.readText());
@@ -522,7 +532,13 @@ export class StudioPage extends BasePage {
     await this.page.goto(clipboardContent);
   }
 
-  async verifyTitleVideoPlayList({ titleVideoPrivate, titleVideoPublic }: { titleVideoPrivate?: string; titleVideoPublic?: string }): Promise<void> {
+  async verifyTitleVideoPlayList({
+    titleVideoPrivate,
+    titleVideoPublic,
+  }: {
+    titleVideoPrivate?: string;
+    titleVideoPublic?: string;
+  }): Promise<void> {
     const titles = await this.getVideoTitles(this.page, TITLE_VIDEO);
 
     if (!titles.includes(titleVideoPrivate)) {
@@ -533,22 +549,30 @@ export class StudioPage extends BasePage {
       await expect(matchingElement).toBeVisible();
       await expect(matchingElement).toHaveText(titleVideoPublic);
     }
-    await this.page.waitForTimeout(2000)
-
+    await this.page.waitForTimeout(2000);
   }
-  async verifyTitle({ title }) {
+  async verifyTitle({title}) {
     await expect(this.titlePlayList).toBeVisible();
     await expect(this.titlePlayList).toHaveText(title);
   }
 
-
-  async verifyContentDetail({ title, description, options, category, contentLang, Visibility, role, thumbnail, uploadVideo }) {
+  async verifyContentDetail({
+    title,
+    description,
+    options,
+    category,
+    contentLang,
+    Visibility,
+    role,
+    thumbnail,
+    uploadVideo,
+  }) {
     await expect(this.TITLE_INPUT).toBeVisible();
-    await expect(this.thumbnailInput).toHaveText(new RegExp(title));
+    await expect(this.TITLE_INPUT).toHaveText(new RegExp(title));
     await this.TITLE_INPUT.hover();
 
     await expect(this.descriptionInpput).toBeVisible();
-    await expect(this.thumbnailInput).toHaveText(new RegExp(description));
+    await expect(this.descriptionInpput).toHaveText(new RegExp(description));
 
     await expect(this.page.locator(selectionList("Category"))).toBeVisible();
     await expect(this.categoryInput).toHaveValue(category);
@@ -561,14 +585,13 @@ export class StudioPage extends BasePage {
 
     const detailsToCheck = [
       // (Disable comments, Hold all comments, Schedule)
-      ...options.map(option => ({ locator: videoDetails(option), text: option })),
-      { locator: selectionList("Content Language"), text: contentLang },
-      { locator: selectionList("Visibility"), text: Visibility },
+      ...options.map((option) => ({locator: videoDetails(option), text: option})),
+      {locator: selectionList("Content Language"), text: contentLang},
+      {locator: selectionList("Visibility"), text: Visibility},
       // Các nút (Cancel, Save, Delete, Download)
-      ...role.map(role => ({ locator: buttonHeader(role), text: role })),
-
+      ...role.map((role) => ({locator: buttonHeader(role), text: role})),
     ];
-    for (const { locator, text, count = 1 } of detailsToCheck) {
+    for (const {locator, text, count = 1} of detailsToCheck) {
       const element = this.page.locator(locator);
 
       for (let i = 0; i < count; i++) {
@@ -577,16 +600,4 @@ export class StudioPage extends BasePage {
       }
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
 }

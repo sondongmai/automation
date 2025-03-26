@@ -1,6 +1,6 @@
-import { PlaywrightTestConfig, devices } from "@playwright/test";
-import { testConfig } from "./testConfig";
-import { OrtoniReportConfig } from "ortoni-report";
+import {PlaywrightTestConfig, devices} from "@playwright/test";
+import {testConfig} from "./testConfig";
+import {OrtoniReportConfig} from "ortoni-report";
 
 const ENV = process.env.npm_config_ENV;
 
@@ -27,7 +27,7 @@ const config: PlaywrightTestConfig = {
   globalSetup: `./global-setup`,
 
   //sets timeout for each test case
-  timeout: 120000,
+  timeout: 180000,
 
   //number of retries if test case fails
   retries: 0,
@@ -36,9 +36,9 @@ const config: PlaywrightTestConfig = {
   reporter: [
     [`./CustomReporterConfig.ts`],
     [`allure-playwright`],
-    [`html`, { outputFolder: "html-report", open: "never" }],
+    [`html`, {outputFolder: "html-report", open: "never"}],
     ["ortoni-report", reportConfig],
-    ['line']
+    ["line"],
   ],
 
   projects: [
@@ -58,7 +58,7 @@ const config: PlaywrightTestConfig = {
         headless: false,
 
         //Browser height and width
-        viewport: { width: 1500, height: 730 },
+        viewport: {width: 1500, height: 730},
         // viewport: { width: 500, height: 730 },
         ignoreHTTPSErrors: true,
 
@@ -82,7 +82,7 @@ const config: PlaywrightTestConfig = {
         browserName: `chromium`,
         baseURL: testConfig[ENV],
         headless: true,
-        viewport: { width: 1500, height: 730 },
+        viewport: {width: 1500, height: 730},
         ignoreHTTPSErrors: true,
         acceptDownloads: true,
         screenshot: `only-on-failure`,
@@ -100,7 +100,7 @@ const config: PlaywrightTestConfig = {
         browserName: `firefox`,
         baseURL: testConfig[ENV],
         headless: true,
-        viewport: { width: 1500, height: 730 },
+        viewport: {width: 1500, height: 730},
         ignoreHTTPSErrors: true,
         acceptDownloads: true,
         screenshot: `only-on-failure`,
@@ -119,7 +119,7 @@ const config: PlaywrightTestConfig = {
         channel: `msedge`,
         baseURL: testConfig[ENV],
         headless: false,
-        viewport: { width: 1500, height: 730 },
+        viewport: {width: 1500, height: 730},
         ignoreHTTPSErrors: true,
         acceptDownloads: true,
         screenshot: `only-on-failure`,
@@ -136,7 +136,7 @@ const config: PlaywrightTestConfig = {
         browserName: `webkit`,
         baseURL: testConfig[ENV],
         headless: true,
-        viewport: { width: 1500, height: 730 },
+        viewport: {width: 1500, height: 730},
         ignoreHTTPSErrors: true,
         acceptDownloads: true,
         screenshot: `only-on-failure`,

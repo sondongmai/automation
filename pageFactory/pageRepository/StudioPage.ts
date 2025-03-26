@@ -113,8 +113,6 @@ export class StudioPage extends BasePage {
   readonly avatarMyChannel: Locator;
   readonly avatarGangJW: Locator;
   readonly kidOption: Locator;
-  readonly visibility: Locator;
-  readonly btnComment: Locator;
 
   constructor(page: Page, context: BrowserContext) {
     super(page, context);
@@ -193,7 +191,6 @@ export class StudioPage extends BasePage {
     this.avatarMyChannel = page.locator("//ul[contains(@class, 'MuiMenu-list')]//li[2]//a");
     this.avatarGangJW = page.locator("//ul[contains(@class, 'MuiMenu-list')]//li[3]//a");
     this.kidOption = page.locator("//input[@value='no']");
-    this.btnComment = page.locator("//div[contains(text(),'Comments')]");
   }
 
   async navigateToStudio(): Promise<void> {
@@ -293,7 +290,7 @@ export class StudioPage extends BasePage {
       await this.page.locator(menuSelectionOption(contentLang)).click();
     }
   }
-  async fillVisibility({visibility}) {
+  async FillVisibility({visibility}) {
     await this.page.locator(selectionList("Visibility")).click();
     await this.page.locator(menuSelectionOption(visibility)).click();
   }
@@ -360,9 +357,6 @@ export class StudioPage extends BasePage {
     await this.deleteBtn.click();
     await this.deleteConfirmCheckbox.check();
     await this.deleteConfirmBtn.click();
-  }
-  async VerifySeeComment(): Promise<void> {
-    await this.btnComment.click();
   }
 
   async verifyContentEmpty(): Promise<void> {

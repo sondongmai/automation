@@ -988,7 +988,7 @@ testData.forEach(({contentType}) => {
 });
 
 testData.forEach(({contentType}) => {
-  test.only(
+  test(
     `verify Studio can update and visibility of Video ${contentType}`,
     {tag: "@Smoke"},
     async ({studioPage, loginPage}) => {
@@ -1015,6 +1015,7 @@ testData.forEach(({contentType}) => {
         locator: studioPage.notification,
         message: messages.VIDEO,
       });
+      await studioPage.clickOnBackChannel();
     },
   );
 });
@@ -1024,7 +1025,9 @@ test(
   {tag: "@Smoke"},
   async ({studioPage, loginPage}) => {
     await studioPage.loginAndNavigate({loginPage}, loginData.newAcc2);
-
+    await studioPage.openSideBarMenu({
+      menu: "content",
+    });
     await studioPage.selectUploadContent(ContentType.short);
 
     await studioPage.fillContentDetail({
@@ -1033,7 +1036,7 @@ test(
       category: "Autos",
       contentLang: "English",
     });
-    await studioPage.handleContentButton({contentType: ContentType.short});
+    await studioPage.handleContentButton({contentType: "other" as ContentType});
 
     await studioPage.changeVisibility({
       order: 0,
@@ -1044,5 +1047,82 @@ test(
       locator: studioPage.notification,
       message: messages.VIDEO,
     });
+    await studioPage.clickOnBackChannel();
+  },
+);
+
+test(
+  `Verify Studio can update Visibility by using edit button of Shorts ${ContentType.short}`,
+  {tag: "@Smoke"},
+  async ({studioPage, loginPage}) => {
+    await studioPage.loginAndNavigate({loginPage}, loginData.newAcc2);
+    await studioPage.openSideBarMenu({
+      menu: "content",
+    });
+    await studioPage.selectUploadContent(ContentType.short);
+
+    await studioPage.fillContentDetail({
+      title: faker.lorem.sentence(18),
+      description: faker.lorem.sentence(30),
+      category: "Autos",
+      contentLang: "English",
+    });
+    await studioPage.handleContentButton({contentType: ContentType.short});
+
+    await studioPage.clickOnEditBtn();
+
+    await studioPage.fillContentDetail({
+      title: faker.lorem.sentence(18),
+      description: faker.lorem.sentence(30),
+      category: "Autos",
+      contentLang: "English",
+    });
+    await studioPage.FillVisibility({visibility: "Public"});
+
+    await studioPage.handleContentButton({contentType: "other" as ContentType});
+
+    await studioPage.verifyNotification({
+      locator: studioPage.notification,
+      message: messages.VIDEO,
+    });
+    await studioPage.clickOnBackChannel();
+  },
+);
+
+test.only(
+  `Verify Studio can update Visibility by using edit button of Video ${ContentType.video}`,
+  {tag: "@Smoke"},
+  async ({studioPage, loginPage}) => {
+    await studioPage.loginAndNavigate({loginPage}, loginData.newAcc2);
+    await studioPage.openSideBarMenu({
+      menu: "content",
+    });
+    await studioPage.selectUploadContent(ContentType.video);
+
+    await studioPage.fillContentDetail({
+      title: faker.lorem.sentence(18),
+      description: faker.lorem.sentence(30),
+      category: "Autos",
+      contentLang: "English",
+    });
+    await studioPage.handleContentButton({contentType: ContentType.video});
+
+    await studioPage.clickOnEditBtn();
+
+    await studioPage.fillContentDetail({
+      title: faker.lorem.sentence(18),
+      description: faker.lorem.sentence(30),
+      category: "Autos",
+      contentLang: "English",
+    });
+    await studioPage.FillVisibility({visibility: "Public"});
+
+    await studioPage.handleContentButton({contentType: "other" as ContentType});
+
+    await studioPage.verifyNotification({
+      locator: studioPage.notification,
+      message: messages.VIDEO,
+    });
+    await studioPage.clickOnBackChannel();
   },
 );

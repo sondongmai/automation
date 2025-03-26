@@ -1046,26 +1046,3 @@ test(
     });
   },
 );
-
-//     title: "Gan Jing World | Creator Studio",
-//   });
-//   await studioPage.expandAvatarMenu({option: expectedMenuItems, title: expectedMenuItems});
-//   await studioPage.navigateFromAvartaMenu({option: "My Channel", title: "Gan Jing World"});
-//   const menuBtnChannel = ["Home", "Posts", "Playlists", "Collections", "About", "Followers"];
-//   await studioPage.menuBtnChannel({option: menuBtnChannel, title: menuBtnChannel});
-
-//   await studioPage.verifyAvatarItems({
-//     option: "Creator studio",
-//     title: "Gan Jing World | Creator Studio",
-//   });
-//   await studioPage.expandAvatarMenu({option: expectedMenuItems, title: expectedMenuItems});
-//   await studioPage.navigateFromAvartaMenu({option: "Gang JW", title: heading.TITLE_GAN_JING_WORLD});
-//   const menuBtnGJW = ["Home", "GJW+", "Campus", "#Events", "Shorts"];
-//   await studioPage.menuBtnGJW({option: menuBtnGJW, title: menuBtnGJW});
-// });
-
-// test(`Verify can remove all uploaded videos`, { tag: "@Smoke" }, async ({ studioPage, loginPage }) => {
-//   await studioPage.loginAndNavigate({ loginPage }, loginData.normalAcc);
-
-//   await studioPage.selectLeftMenu("Content");
-// });
